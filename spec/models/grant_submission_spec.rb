@@ -1,8 +1,8 @@
 describe GrantSubmission do
   subject { FactoryGirl.create(:grant_submission) }
 
-  describe '#max_funding_dollars' do
-    its(:max_funding_dollars) { is_expected.to eq(subject.grant.max_funding_dollars) }
+  describe '#funding_levels_csv' do
+    its(:funding_levels_csv) { is_expected.to eq('subject.grant.funding_levels_csv') }
   end
 
   describe '#funded?' do
@@ -61,10 +61,10 @@ describe GrantSubmission do
 
   # TODO: need to add a test for comparing csv of requests with csv levels
   context 'validations' do
-    context 'with requested_funding_dollars greater than grant limit' do
+    context 'with funding_requests_csv greater than grant limit' do
       it 'is not valid' do
         expect(subject).to be_valid
-        subject.requested_funding_dollars = subject.grant.max_funding_dollars + 1
+        subject.funding_requests_csv = subject.grant.funding_levels_csv.to_i + 1
         expect(subject).not_to be_valid
       end
     end
