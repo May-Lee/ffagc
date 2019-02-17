@@ -82,6 +82,7 @@ function load_funding_levels(chosen_grant) {
 
 // validates that the requested grant levels are all valid according to the
 // levels_json object.  Returns false if levels_json is unset.
+// This function should be kept in sync with grant_submissions_controller.
 function validate_funding_levels() {
   if (levels_json === null) {
     return false;
@@ -90,6 +91,7 @@ function validate_funding_levels() {
   $('#funding_levels').children().each(function(index) {
     if ($(this).is('input:text')) {
       level_str = $(this).val().replace('$', '');
+      level_str = level_str.replace(',', '');
       if (level_str === '') {
         valid = false;
         return false;
