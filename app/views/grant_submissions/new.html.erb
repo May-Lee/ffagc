@@ -12,11 +12,11 @@
   <strong>Important Notes</strong>
   <ul>
    <li>Please choose one or more <strong>approved funding levels</strong> for
-     the Grant you're applying for.  Funding requests at values between grant
-     levels will not be accepted by the system.</li>
+     the Grant you're applying for. Funding requests at values between grant
+     levels and blank funding requests will not be accepted by the system.</li>
    <li>If you'd like to apply for <strong>more than one funding level</strong>,
      you may press the + button next to the funding entry box and add more
-     levels.  Please don't submit more than one application for the same
+     levels. Please don't submit more than one application for the same
      project.</li>
    <li><strong>Do not</strong> include any information identifying the artist(s)
      (such as name, alias, contact information, etc) in the submission document
@@ -49,15 +49,11 @@
                 :input_html => { :onclick => "load_funding_levels(get_chosen_grant())" } %>
             </div>
 
+            <label class="control-label string required" for="funding_levels"><abbr title="required">*</abbr> Requested Funding</label>
             <div id="funding_levels"></div>
             <h5 id="funding_level_text"></h5>
             <h5>If you are applying for more than one funding level, click the
                 plus button and enter the other levels.</h5>
-
-            <% if can? :grant, GrantSubmission %>
-              <%= f.input :granted_funding_dollars, :label => "Granted Funding ($)", :required => false, :validate => true, as: :integer, html5: true  %>
-              <%= f.input :funding_decision, :label => "Funding Finalized", :required => false, as: :boolean, html5: true  %>
-            <% end %>
           </div>
         </div>
       </div>
