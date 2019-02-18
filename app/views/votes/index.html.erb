@@ -53,12 +53,7 @@
             <% end %></h4>
               Grant: <%= gs.grant&.name || 'Unknown' %> for <%= funding_requests_pretty(gs) %><br />
               <%= link_to 'PDF Submission', gs.proposal_url, target: :blank %><br />
-
-              <% if gs.has_questions? %>
-                <%= link_to discussion_status(gs), grant_submission_path(gs) %>
-              <% else %>
-                No discussion
-              <% end %>
+              <%= link_to discussion_status(gs), grant_submission_path(gs) %>
             </div>
           </td>
           <td class="hide-mobile">
@@ -70,11 +65,7 @@
           <td class="text-right hide-mobile"><%= funding_requests_pretty(gs) %></td>
           <td class="hide-mobile"><%= link_to 'Open...', gs.proposal_url, target: :blank %></td>
           <td class="hide-mobile">
-            <% if gs.has_questions? %>
-              <%= link_to discussion_status(gs), grant_submission_path(gs) %>
-            <% else %>
-              None
-            <% end %>
+            <%= link_to discussion_status(gs), grant_submission_path(gs) %>
           </td>
           <td class="vote-column text-center">
             <select id="t[<%= gs.id %>]" name="t[<%= gs.id %>]" onchange="ajax_submit('.save-msg-<%= gs.id %>', 'vote_form')">

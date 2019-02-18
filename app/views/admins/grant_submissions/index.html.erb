@@ -75,11 +75,7 @@
           <strong>F</strong><%= @results[gs.id]['avg_f'] %>
           <br/>Avg:<%= @results[gs.id]['avg_s'] %>, Votes:<%= @results[gs.id]['num_total'] %><br/>
         <% end %>
-        <% if gs.has_questions? %>
-          <%= link_to discussion_status(gs), grant_submission_path(gs) %>
-        <% else %>
-          No discussion
-        <% end %>
+        <%= discussion_status(gs) %>
       </div>
       <div class="btn-toolbar">
         <div class="btn-group">
