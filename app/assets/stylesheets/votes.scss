@@ -8,14 +8,13 @@
   height: 1em;
 }
 
+// For narrow screens, we hide a bunch of columns and show more detail in the
+// first cell.
 .grant-submission-description {
   display: none;
 }
 
 @media screen and (max-width: 800px) {
-  .grant-submission-name {
-    display: none;
-  }
   .hide-mobile {
     display: none
   }
