@@ -1,11 +1,11 @@
 <div class="panel panel-default">
   <div class="panel-heading">
     <h3 class="panel-title clearfix">Admins
-      <div class="btn-group pull-right">
         <% if can? :new, Admin %>
+        <div class="btn-group pull-right">
           <%= link_to "Add Admin", new_admin_path, class: 'btn btn-sm btn-primary' %>
+        </div>
         <% end %>
-      </div>
     </h3>
   </div>
   <table class="table table-striped">
