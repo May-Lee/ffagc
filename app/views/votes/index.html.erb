@@ -46,8 +46,9 @@
           <td>
             <div class="grant-submission-name"><%= gs.name %></div>
             <div class="grant-submission-description">
-              Submission: <strong><%= gs.name %></strong><br />
-              Tags: <h4><% gs.tags(can?(:view_hidden, Tag)).each do |tag| %>
+              <!-- This stuff only shown in narrow-screen mode -->
+              <strong><%= gs.name %></strong><br />
+              <h4><% gs.tags(can?(:view_hidden, Tag)).each do |tag| %>
             <span class="label label-default label-thin"><%= tag %></span>
             <% end %></h4>
               Grant: <%= gs.grant&.name || 'Unknown' %> for <%= funding_requests_pretty(gs) %><br />
