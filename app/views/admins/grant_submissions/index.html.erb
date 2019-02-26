@@ -26,6 +26,7 @@
   </div>
   <div class="btn-group pull-right" >
     <%= link_to "By Score", admins_grant_submissions_path(reveal: @revealed, show_scores: @show_scores, scope: @scope, grantscope: @grantscope, tagscope: @tagscope, funded: @show_funded, order: :score), class: ['btn', 'btn-default', (@order == 'score' ? 'active' : nil)] %>
+    <%= link_to "By Requested $", admins_grant_submissions_path(reveal: @revealed, show_scores: @show_scores, scope: @scope, grantscope: @grantscope, tagscope: @tagscope, funded: @show_funded, order: :requested), class: ['btn', 'btn-default', (@order == 'requested' ? 'active' : nil)] %>
     <%= link_to "By Date", admins_grant_submissions_path(reveal: @revealed, show_scores: @show_scores, scope: @scope, grantscope: @grantscope, tagscope: @tagscope, funded: @show_funded, order: :date), class: ['btn', 'btn-default', (@order == 'date' ? 'active' : nil)] %>
     <%= link_to "By Name", admins_grant_submissions_path(reveal: @revealed, show_scores: @show_scores, scope: @scope, grantscope: @grantscope, tagscope: @tagscope, funded: @show_funded, order: :name), class: ['btn', 'btn-default', (@order == 'name' ? 'active' : nil)] %>
   </div>
