@@ -33,8 +33,9 @@ class GrantSubmissionsController < ApplicationController
     end
   end
 
-  # We tolerate blank entries, entries with dollar signs, and entries with
-  # decimal points (which we destroy)
+  # We tolerate blank entries, entries with dollar signs, entries with commas,
+  # and entries with decimal points (which we destroy)
+  # This should be kept in sync with new.js.
   def clean_funding_values(levels)
     normed_list = []
     levels.each do |level|
@@ -42,6 +43,7 @@ class GrantSubmissionsController < ApplicationController
         next
       end
       level = level.gsub("$", "")
+      level = level.gsub(",", "")
       normed_list.append(level.to_i)
     end
     return normed_list.join(",")

@@ -87,6 +87,21 @@ class GrantSubmission < ActiveRecord::Base
     return funding_requests_csv.split(',')
   end
 
+  def funding_requests_as_int_list
+    funding_requests_as_list.map{ |r| Integer(r) }
+  end
+
+  def by_requested(other)
+    self.mean_requested <=> other.mean_requested
+  end
+
+  def mean_requested
+    mean = 0
+    requests = funding_requests_as_int_list
+    requests.each { |r| mean += r }
+    mean.to_f / requests.length
+  end
+
   private
 
   def update_question_and_answer_dates
