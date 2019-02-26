@@ -65,6 +65,8 @@ class Admins::GrantSubmissionsController < ApplicationController
       @grant_submissions = @grant_submissions.to_a.sort_by { |gs| [gs.grant_id, -gs.avg_score] }
     elsif @order == 'name'
       @grant_submissions = @grant_submissions.to_a.sort_by { |gs| [gs.grant_id, gs.name] }
+    elsif @order == 'requested'
+      @grant_submissions = @grant_submissions.to_a.sort { |gs1, gs2| gs1.by_requested(gs2) }
     end
 
     respond_to do |format|
