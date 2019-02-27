@@ -159,7 +159,7 @@ class GrantSubmissionsController < ApplicationController
   private
 
   def contract_filename(gs, contract_template, now)
-    title = @grant_submission.name.gsub!(/[^0-9A-Za-z.\-]/, '_')
+    title = @grant_submission.name.gsub!(/[^(0-9A-Za-z.\-)]/, '_')
     "#{title}_#{contract_template}_Contract_#{now.strftime("%Y%m%d")}.pdf"
   end
 
