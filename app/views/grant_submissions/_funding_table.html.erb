@@ -25,7 +25,7 @@
           <%= number_to_currency(grant_submission.granted_funding_dollars, precision: 0) %>
         <% end %>
       <% else %>
-        <% if (grant_submission.granted_funding_dollars || 0) %>
+        <% if grant_submission.granted_funding_dollars %>
           <%= number_to_currency(grant_submission.granted_funding_dollars, precision: 0) %>
         <% end %>
       <% end %>
