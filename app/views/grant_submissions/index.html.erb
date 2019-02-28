@@ -58,6 +58,7 @@
     <thead>
     <tr>
       <th>Submission Title</th>
+      <th>Tags</th>
       <th>Grant</th>
       <th>Funding</th>
       <th></th>
@@ -67,6 +68,11 @@
   <% @grant_submissions.each do |gs| %>
     <tr>
       <td><%= gs.name %></td>
+      <td>
+        <h4><% gs.tags(can?(:view_hidden, Tag)).each do |tag| %>
+        <span class="label label-default label-thin"><%= tag %></span>
+        <% end %></h4>
+      </td>
       <td><%= gs.grant&.name %> Grant</td>
       <td>
         <%= render partial: 'funding_table', locals: { grant_submission: gs }%>
