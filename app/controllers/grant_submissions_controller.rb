@@ -87,12 +87,19 @@ class GrantSubmissionsController < ApplicationController
   end
 
   def index
+    @celebrate_funded = artist_logged_in? && @grant_submissions.funded.exists?
+
     @grantscope = params[:grantscope] || 'all'
     if @grantscope != 'all'
       @grant_submissions = @grant_submissions.joins(:grant).where("grants.name = ?", @grantscope)
     end
+    @show_funded = params[:funded] || 'all'
+    if @show_funded != 'all'
+      @grant_submissions = @grant_submissions.where("granted_funding_dollars > 0")
+    end
 
-    @celebrate_funded = artist_logged_in? && @grant_submissions.funded.exists?
+    # Sort by grantid and name
+    @grant_submissions = @grant_submissions.to_a.sort_by { |gs| [gs.grant_id, gs.name] }
   end
 
   def show
