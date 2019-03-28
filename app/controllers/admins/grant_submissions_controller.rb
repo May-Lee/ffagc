@@ -113,7 +113,8 @@ class Admins::GrantSubmissionsController < ApplicationController
             UserMailer.grant_not_funded(gs, artist, grant, event_year).deliver
             logger.info "email: grant not funded sent to #{artist.email}"
           end
-        rescue
+        rescue StandardError => e
+          logger.error e.message + ", aborting"
           flash[:warning] = "Error sending email (#{sent} sent)"
           redirect_to action: 'index'
           return

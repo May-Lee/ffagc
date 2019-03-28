@@ -42,6 +42,9 @@ class UserMailer < ActionMailer::Base
 
     f = "#{Rails.root}/config/template_values.yml"
     @values = YAML.load(File.open(f, "rb").read)[@grant.name.downcase]
+    if !@values
+      raise "ERROR loading email template_values for #{@grant.name.downcase}"
+    end
 
     mail to: @artist.email, cc: get_cc(), subject: "#{@year} Firefly #{@grant.name} Grant Decision: #{@submission.name}"
   end
