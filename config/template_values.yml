@@ -14,10 +14,8 @@ temple:
              "Tuesday, February 25, 2019: Check cut and sent",
              "Tuesday, July 2 - Sunday, July 7, 2019: Firefly!"]
 moonshot:
-  contract_deadline: "Friday, February 22, 2019"
-  schedule: ["Friday, February 22, 2019: Signed Contracts Due",
-             "Tuesday, February 25, 2019: Check cut and sent",
-             "Tuesday, July 2 - Sunday, July 7, 2019: Firefly!",
+  contract_deadline: "10 days after notification of Grant"
+  schedule: ["Tuesday, July 2 - Sunday, July 7, 2019: Firefly!",
              "Monday, July 22, 2019: Firefly documentation due"]
 creativity:
   contract_deadline: "Friday, April 5, 2019"
@@ -43,7 +41,7 @@ skillshare:
   schedule: ["Friday, April 19, 2019: Signed Contracts Due",
              "Monday, April 22, 2019: Check cut and sent",
              "Tuesday, July 2 - Sunday, July 7, 2019: Firefly!"]
-bex:
+burner exchange grants:
   contract_deadline: "Friday, April 19, 2019"
   schedule: ["Friday, April 19, 2019: Signed Contracts Due",
              "Monday, April 22, 2019: Check cut and sent",
