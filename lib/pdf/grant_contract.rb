@@ -99,7 +99,7 @@ class GrantContract < Prawn::Document
         bounding_box([50, cursor], :width => 200, :height => cursor) do
           stroke_horizontal_rule
           move_down 5
-          text "#{@artist}"
+          text "Artist"
 
           move_down 40
           stroke_horizontal_rule

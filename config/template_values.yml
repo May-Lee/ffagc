@@ -4,6 +4,8 @@
 # the db (famous last words).  Rule of thumb: If you need to know the value
 # behind the formatted text, don't put it here.
 
+# note, the keys here are the downcase of the grant name
+
 install_day: "Friday, July 5, 2019"
 skill_attend_day: "Friday, June 28, 2019"
 temple:
@@ -18,6 +20,13 @@ moonshot:
              "Tuesday, July 2 - Sunday, July 7, 2019: Firefly!",
              "Monday, July 22, 2019: Firefly documentation due"]
 creativity:
+  contract_deadline: "Friday, April 5, 2019"
+  schedule: ["Friday, April 5, 2019: Signed Contracts Due",
+             "Monday, April 8, 2019: First check cut and sent",
+             "Tuesday, July 2 - Sunday, July 7, 2019: Firefly!",
+             "Monday, July 22, 2019: Firefly documentation due",
+             "Tuesday, July 30, 2019: Second check cut and sent"]
+creativity2:
   contract_deadline: "Friday, April 5, 2019"
   schedule: ["Friday, April 5, 2019: Signed Contracts Due",
              "Monday, April 8, 2019: First check cut and sent",
