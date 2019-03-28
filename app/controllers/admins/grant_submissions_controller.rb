@@ -115,7 +115,7 @@ class Admins::GrantSubmissionsController < ApplicationController
           end
         rescue StandardError => e
           logger.error e.message + ", aborting"
-          flash[:warning] = "Error sending email (#{sent} sent)"
+          flash[:warning] = "Error sending email (#{sent} sent): " + e.message
           redirect_to action: 'index'
           return
         end
