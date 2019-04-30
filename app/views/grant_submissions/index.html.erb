@@ -14,7 +14,11 @@
       <%= link_to "Submit Grant Proposal", new_grant_submission_path, class: 'btn btn-primary' %>
     <% end %>
   <% else %>
-    No grants open for submission at this time.
+    <p>No grants open for submission at this time.</p>
+    <%# XXX TEMP: Direct people to the smol grants %>
+    <p>Are you looking for the Smol grants?
+<a href="https://docs.google.com/forms/d/1iSCthnLFzsk72B_fctuycP6F0p-ZiBscafBo38VsmRY">
+Apply here!</a></p>
   <% end %>
 <% end %>
 
