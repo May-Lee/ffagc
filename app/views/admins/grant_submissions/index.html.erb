@@ -135,6 +135,12 @@
     <td class="text-center"><%= button_to "Finalize", '#', :onclick => "confirm_selected(event);", class: 'btn btn-warning' %></td>
   </tr>
   <tr class="hide-mobile">
+    <td colspan="<%= colspan_wide - 1 %>" class="text-right">Grant request range</td>
+    <% request_vals = GrantSubmission.requested_funding_dollars_total(@grant_submissions.map {|gs| gs.id}) %>
+    <td class="text-right footer"><%= number_to_currency request_vals[:min] %> - <%= number_to_currency request_vals[:max] %></td>
+    <td></td>
+  </tr>
+  <tr class="hide-mobile">
     <td colspan="<%= colspan_wide - 1 %>" class="text-right">Total proposed grant money</td>
     <td class="text-right"><%= number_to_currency GrantSubmission.granted_funding_dollars_total(@grant_submissions.map {|gs| gs.id}, funding_decision: false) %></td>
     <td></td>
@@ -157,6 +163,12 @@
       </form>
     </td>
     <td class="text-center"><%= button_to "Finalize", '#', :onclick => "confirm_selected(event);", class: 'btn btn-warning' %></td>
+  </tr>
+  <tr class="footer-mobile">
+    <td colspan="<%= colspan_mobile - 1 %>" class="text-right">Grant request range</td>
+    <% request_vals = GrantSubmission.requested_funding_dollars_total(@grant_submissions.map {|gs| gs.id}) %>
+    <td class="text-right footer"><%= number_to_currency request_vals[:min] %> - <%= number_to_currency request_vals[:max] %></td>
+    <td></td>
   </tr>
   <tr class="footer-mobile">
     <td colspan="<%= colspan_mobile - 1 %>" class="text-right">Total proposed grant money</td>

@@ -74,6 +74,32 @@ class GrantSubmission < ActiveRecord::Base
     end
   end
 
+  # Sum up requested dollars for the provided grant ids (for filtering)
+  # Returns a hash of the sum of minimum requests and maximum requests.
+  def self.requested_funding_dollars_total(id_list)
+    min_request_total = 0
+    max_request_total = 0
+    GrantSubmission.where(id: id_list).each do |gs|
+      gs_min = -1
+      gs_max = 0
+      gs.funding_requests_csv.split(',').each do |token|
+        begin
+          req = Integer(token)
+          if req > gs_max
+            gs_max = req
+          end
+          if req < gs_min || gs_min == -1
+            gs_min = req
+          end
+        rescue ArgumentError
+        end
+      end
+      min_request_total += gs_min
+      max_request_total += gs_max
+    end
+    return {min: min_request_total, max: max_request_total}
+  end
+
   # Sum up granted dollars for the provided grant ids (for filtering) and
   # by query (for further filtering).
   def self.granted_funding_dollars_total(id_list, query)
