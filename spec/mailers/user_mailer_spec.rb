@@ -13,7 +13,7 @@ describe UserMailer do
     its(:to) { is_expected.to eq([artist.email]) }
 
     it do
-      expect(subject.body.encoded).to include(artist.name)
+      expect(subject.body.encoded).to include(CGI.escapeHTML(artist.name))
       expect(subject.body.encoded).to include(artist.activation_token)
       expect(subject.body.encoded).to include(CGI.escape(artist.email))
     end
@@ -31,7 +31,7 @@ describe UserMailer do
     its(:to) { is_expected.to eq([artist.email]) }
 
     it do
-      expect(subject.body.encoded).to include(artist.name)
+      expect(subject.body.encoded).to include(CGI.escapeHTML(artist.name))
       expect(subject.body.encoded).to include(artist.reset_token)
       expect(subject.body.encoded).to include(CGI.escape(artist.email))
     end
