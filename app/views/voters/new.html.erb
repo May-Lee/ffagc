@@ -7,7 +7,7 @@
   <p><strong>Notice</strong>: If you were on the committee in previous years, thank you for being so awesome! You <b>will</b> need to sign up again for <%= event_year %>.</p>
 </div>
 
-<%= simple_form_for @voter do |f| %>
+<%= simple_form_for @voter, :html => { :onsubmit => "return validate();" } do |f| %>
   <%= f.simple_fields_for :voter_survey do |f_voter_survey| %>
     <div class="panel panel-default">
       <div class="panel-heading">
@@ -26,16 +26,16 @@
         <h3 class="panel-title">Requirements</h3>
       </div>
       <div class="panel-body">
-        <div class="checkbox">
+        <div class="checkbox"><abbr title="required">*</abbr>
           <label><%= f_voter_survey.check_box :has_attended_firefly %>I have attended at least one previous Firefly</label>
         </div>
-        <div class="checkbox">
+        <div class="checkbox"><abbr title="required">*</abbr>
           <label><%= f_voter_survey.check_box :not_applying_this_year %>I am NOT applying for a Firefly Art Grant in <%= event_year %></label>
         </div>
-        <div class="checkbox">
+        <div class="checkbox"><abbr title="required">*</abbr>
           <label><%= f_voter_survey.check_box :will_read %>I commit to reading and considering > 35 applications (~4-6 hours of brain time)</label>
         </div>
-        <div class="checkbox">
+        <div class="checkbox"><abbr title="required">*</abbr>
           <label><%= f_voter_survey.check_box :signed_agreement %>
             <strong>I have read and agree to abide by the
             <a href="https://www.fireflyartscollective.org/wp-content/uploads/2017/01/FireflyArtGrantCommitteeCodeofEthics.pdf">
@@ -78,6 +78,8 @@
   <% end %>
 
   <p>
-  <%= submit_tag("Sign Up!", class: "btn btn-primary")%>
+  <%= submit_tag("Sign Up!", class: "btn btn-primary") %>
   </p>
 <% end %>
+
+<%= javascript_include_tag 'voters/new', 'data-turbolinks-track': true %>
