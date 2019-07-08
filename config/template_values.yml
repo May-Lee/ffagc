@@ -4,44 +4,42 @@
 # the db (famous last words).  Rule of thumb: If you need to know the value
 # behind the formatted text, don't put it here.
 
-# note, the keys here are the downcase of the grant name
-
 install_day: "Friday, July 5, 2019"
 skill_attend_day: "Friday, June 28, 2019"
-temple:
+Temple:
   contract_deadline: "Friday, February 22, 2019"
   schedule: ["Friday, February 22, 2019: Signed Contracts Due",
              "Tuesday, February 25, 2019: Check cut and sent",
              "Tuesday, July 2 - Sunday, July 7, 2019: Firefly!"]
-moonshot:
+Moonshot:
   contract_deadline: "10 days after notification of Grant"
   schedule: ["Tuesday, July 2 - Sunday, July 7, 2019: Firefly!",
              "Monday, July 22, 2019: Firefly documentation due"]
-creativity:
+Creativity:
   contract_deadline: "Friday, April 5, 2019"
   schedule: ["Friday, April 5, 2019: Signed Contracts Due",
              "Monday, April 8, 2019: First check cut and sent",
              "Tuesday, July 2 - Sunday, July 7, 2019: Firefly!",
              "Monday, July 22, 2019: Firefly documentation due",
              "Tuesday, July 30, 2019: Second check cut and sent"]
-creativity2:
+Creativity (Second Round):
   contract_deadline: "Friday, April 5, 2019"
   schedule: ["Friday, April 5, 2019: Signed Contracts Due",
              "Monday, April 8, 2019: First check cut and sent",
              "Tuesday, July 2 - Sunday, July 7, 2019: Firefly!",
              "Monday, July 22, 2019: Firefly documentation due",
              "Tuesday, July 30, 2019: Second check cut and sent"]
-legacy:
+Legacy:
   contract_deadline: "Friday, April 19, 2019"
   schedule: ["Friday, April 19, 2019: Signed Contracts Due",
              "Monday, April 22, 2019: Check cut and sent",
              "Tuesday, July 2 - Sunday, July 7, 2019: Firefly!"]
-skillshare:
+Skillshare:
   contract_deadline: "Friday, April 19, 2019"
   schedule: ["Friday, April 19, 2019: Signed Contracts Due",
              "Monday, April 22, 2019: Check cut and sent",
              "Tuesday, July 2 - Sunday, July 7, 2019: Firefly!"]
-burner exchange grants:
+Burner Exchange Grants:
   contract_deadline: "Friday, April 19, 2019"
   schedule: ["Friday, April 19, 2019: Signed Contracts Due",
              "Monday, April 22, 2019: Check cut and sent",
