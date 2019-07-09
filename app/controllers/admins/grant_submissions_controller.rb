@@ -96,6 +96,18 @@ class Admins::GrantSubmissionsController < ApplicationController
     end
   end
 
+  def discuss
+    @grant_submission = GrantSubmission.where(id: params[:grant_submission_id]).take
+    if @grant_submission == nil
+      flash[:warning] = "No such grant submission to discuss"
+      redirect_to action: 'index'
+      return
+    end
+    @other_submissions = GrantSubmission
+        .where(artist_id: @grant_submission.artist_id)
+        .where.not(id: @grant_submission.id)
+  end
+
   def send_fund_emails
     ids = params[:ids]&.split(',') || []
     @grant_submissions = GrantSubmission.where(id: ids)
