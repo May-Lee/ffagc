@@ -105,7 +105,7 @@
     <% end %>
     <td class="hide-mobile"><% if gs.funding_decision %>Yes<% else %>No<% end %></td>
     <td>
-      <%= render partial: 'grant_submissions/funding_table', locals: { grant_submission: gs }%>
+      <%= render partial: 'grant_submissions/funding_table_voters', locals: { grant_submission: gs }%>
     </td>
     <% if @revealed %>
       <td><%= (Artist.where(id: gs.artist_id).take).name rescue "Unknown" %></td>

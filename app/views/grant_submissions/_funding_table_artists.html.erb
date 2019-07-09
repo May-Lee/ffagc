@@ -1,0 +1,22 @@
+<table class="text-right">
+  <tr>
+    <td>
+      Requested:
+    </td>
+    <td>
+      <%= funding_requests_pretty(grant_submission) %>
+    </td>
+  </tr>
+  <tr>
+    <td>
+    <% if grant_submission.funded? %>
+      Granted:
+    <% end %>
+    </td>
+    <td>
+      <% if grant_submission.funding_decision && (grant_submission.granted_funding_dollars || 0) > 0 %>
+        <%= number_to_currency(grant_submission.granted_funding_dollars, precision: 0) %>
+      <% end %>
+    </td>
+  </tr>
+</table>
