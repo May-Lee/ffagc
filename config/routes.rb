@@ -22,7 +22,8 @@ Rails.application.routes.draw do
 
   resources :admins, only: [:new, :create, :index]
   namespace :admins do
-    resources :grant_submissions, only: [:index] do
+    resources :grant_submissions, only: [:index, :discuss] do
+      get 'discuss'
       collection do
         post 'send_fund_emails'
         post 'send_question_emails'
@@ -65,7 +66,11 @@ Rails.application.routes.draw do
   namespace :sessions do
     resource :admin, only: [:new, :create, :destroy]
     resource :artist, only: [:new, :create, :destroy]
-    resource :voter, only: [:new, :create, :destroy]
+    resource :voter, only: [:new, :create, :destroy] do
+      member do
+        get 'unverified'
+      end
+    end
   end
 
   # The priority is based upon order of creation: first created -> highest priority.

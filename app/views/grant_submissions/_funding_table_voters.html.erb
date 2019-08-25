@@ -1,0 +1,31 @@
+<table>
+  <tr>
+    <td class="text-right">
+      Requested:
+    </td>
+    <td class="text-left">
+      <%= funding_requests_pretty(grant_submission) %>
+  </tr>
+  <tr>
+    <td class="text-right">
+    <% if grant_submission.funding_decision %>
+      <% if (grant_submission.granted_funding_dollars || 0) > 0 %>
+        Granted:
+      <% else %>
+        Not Funding
+      <% end %>
+    <% elsif grant_submission.granted_funding_dollars %>
+      Proposed:
+    <% end %>
+    </td>
+    <td class="text-left">
+    <% if grant_submission.funding_decision %>
+      <% if (grant_submission.granted_funding_dollars || 0) > 0 %>
+        <%= number_to_currency(grant_submission.granted_funding_dollars, precision: 0) %>
+      <% end %>
+    <% elsif grant_submission.granted_funding_dollars %>
+      <%= number_to_currency(grant_submission.granted_funding_dollars, precision: 0) %>
+    <% end %>
+    </td>
+  </tr>
+</table>

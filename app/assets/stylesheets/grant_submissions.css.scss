@@ -14,3 +14,41 @@
   display: inline;
   width: 25%;
 }
+
+.label-thin {
+  padding: .1em .3em .1em;
+}
+
+div[class~="panel-heading"][aria-expanded=true] .icon-chevron-right {
+  display: none;
+}
+div[class~="panel-heading"][aria-expanded=false] .icon-chevron-down {
+  display: none;
+}
+
+// For narrow screens, we hide a bunch of columns and show more detail in the
+// first cell.
+.grant-submission-description {
+  display: none;
+}
+.footer-mobile {
+  display: none;
+}
+
+@media screen and (max-width: 800px) {
+  .hide-mobile {
+    display: none
+  }
+  .grant-submission-name {
+    display: none;
+  }
+  .grant-submission-description {
+    display: block;
+  }
+  .footer-mobile {
+    display: block;
+  }
+  tr.footer-mobile {
+    display: table-row;
+  }
+}

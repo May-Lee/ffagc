@@ -25,4 +25,13 @@ class Voter < ActiveRecord::Base
   def as_email_recipient
     "#{self.name} <#{self.email}>"
   end
+
+  # Return the number of submissions this voter has been assigned for a specific
+  # grant type.
+  def assignments_per_grant(grant_id)
+    VoterSubmissionAssignment.joins(:voter, :grant_submission)
+        .where('voters.id' => id)
+        .where('grant_submissions.grant_id' => grant_id)
+        .count
+  end
 end

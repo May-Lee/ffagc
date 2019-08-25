@@ -1,7 +1,7 @@
-FactoryGirl.define do
+FactoryBot.define do
   factory :artist do
     name { Faker::Name.name }
-    email
+    email { Faker::Internet.email }
     password { Faker::Internet.password }
     contact_name { Faker::Name.name }
     contact_phone { Faker::PhoneNumber.phone_number }

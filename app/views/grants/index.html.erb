@@ -27,12 +27,15 @@
   <% end %>
 <% end %>
 
-<% if can? :new, Grant %>
-  <p><%= link_to "New Tag", new_tag_path, class: 'btn btn-primary' %></p>
-<% end %>
 <div class="panel panel-default">
   <div class="panel-heading">
-    <h3 class="panel-title">Submission Tags</h3>
+    <h3 class="panel-title clearfix">Submission Tags
+      <% if can? :new, Grant %>
+        <div class="btn-group pull-right">
+          <%= link_to "New Tag", new_tag_path, class: 'btn btn-sm btn-primary' %>
+        </div>
+      <% end %>
+    </h3>
   </div>
   <table class="table table-striped">
     <thead>
@@ -68,21 +71,23 @@
   </table>
 </div>
 
-<% if can? :new, Grant %>
-  <p>
-    <%= link_to "New Grant", new_grant_path, class: 'btn btn-primary' %>
-  </p>
-<% end %>
 
 <% if @grants.present? %>
 <div class="panel panel-default">
   <div class="panel-heading">
-    <h3 class="panel-title">Grants</h3>
+    <h3 class="panel-title clearfix">Grants
+      <% if can? :new, Grant %>
+        <div class="btn-group pull-right">
+          <%= link_to "New Grant", new_grant_path, class: 'btn btn-sm btn-primary' %>
+        </div>
+      <% end %>
+    </h3>
   </div>
   <table class="table table-striped">
     <thead>
       <tr>
         <th>Name</th>
+        <% if current_admin %><th>Contract Template</th><% end %>
         <th>Funding Levels</th>
         <th>Submission Start</th>
         <th>Submission End</th>
@@ -100,9 +105,8 @@
     <tbody>
     <% @grants.each do |g| %>
     <tr>
-      <td>
-        <%= g.name %>
-      </td>
+      <td><%= g.name %></td>
+      <% if current_admin %><td><%= g.contract_template %></td><% end %>
       <td><%= funding_levels_pretty(g) %></td>
       <td>
         <%= Date::DAYNAMES[g.submit_start.wday] %>,

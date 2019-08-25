@@ -82,6 +82,7 @@ function load_funding_levels(chosen_grant) {
 
 // validates that the requested grant levels are all valid according to the
 // levels_json object.  Returns false if levels_json is unset.
+// This function should be kept in sync with grant_submissions_controller.
 function validate_funding_levels() {
   if (levels_json === null) {
     return false;
@@ -89,10 +90,11 @@ function validate_funding_levels() {
   var valid = true;
   $('#funding_levels').children().each(function(index) {
     if ($(this).is('input:text')) {
-      // Ignore blanks
       level_str = $(this).val().replace('$', '');
+      level_str = level_str.replace(',', '');
       if (level_str === '') {
-        return true
+        valid = false;
+        return false;
       }
       // Javascript Number parsing is not precisely the same as Ruby's Integer
       // parsing, but it's close enough and I've worked around some of the

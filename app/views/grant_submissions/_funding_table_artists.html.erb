@@ -11,14 +11,10 @@
     <td>
     <% if grant_submission.funded? %>
       Granted:
-    <% elsif grant_submission.granted_funding_dollars %>
-      Proposed:
-    <% elsif grant_submission.funding_decision %>
-      Not Funding
     <% end %>
     </td>
     <td>
-      <% if grant_submission.granted_funding_dollars %>
+      <% if grant_submission.funding_decision && (grant_submission.granted_funding_dollars || 0) > 0 %>
         <%= number_to_currency(grant_submission.granted_funding_dollars, precision: 0) %>
       <% end %>
     </td>

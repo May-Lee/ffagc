@@ -16,17 +16,19 @@
   <div class="btn-group">
     <%= link_to "Only Active", admins_grant_submissions_path(reveal: @revealed, show_scores: @show_scores, scope: @scope == 'active' ? 'all' : 'active', grantscope: @grantscope, tagscope: @tagscope, funded: @show_funded, order: @order), class: ['btn', 'btn-default', (@scope == 'active' ? 'active' : nil)] %>
     <%= link_to "Only Funded", admins_grant_submissions_path(reveal: @revealed, show_scores: @show_scores, scope: @scope, grantscope: @grantscope, tagscope: @tagscope, funded: @show_funded == 'all' ? 'funded' : 'all', order: @order), class: ['btn', 'btn-default', (@show_funded == 'all' ? nil : 'active')] %>
-    <%= link_to "Show Scores", admins_grant_submissions_path(reveal: @revealed, show_scores: @show_scores ? false : true, scope: @scope, grantscope: @grantscope, tagscope: @tagscope, funded: @show_funded, order: @order), class: ['btn', 'btn-default', (@show_scores ? 'active' : nil)] %>
   </div>
-  <br/><br/>
+</div>
+<hr>
+<div class="btn-toolbar">
   <div class="btn-group">
+    <%= link_to "Show Scores", admins_grant_submissions_path(reveal: @revealed, show_scores: @show_scores ? false : true, scope: @scope, grantscope: @grantscope, tagscope: @tagscope, funded: @show_funded, order: @order), class: ['btn', 'btn-default', (@show_scores ? 'active' : nil)] %>
+    <%= link_to "💾 Generate CSV", admins_grant_submissions_path(format: 'csv', reveal: @revealed, show_scores: @show_scores, scope: @scope, grantscope: @grantscope, tagscope: @tagscope, funded: @show_funded, order: :name), class: ['btn', 'btn-default'] %>
+  </div>
+  <div class="btn-group pull-right" >
     <%= link_to "By Score", admins_grant_submissions_path(reveal: @revealed, show_scores: @show_scores, scope: @scope, grantscope: @grantscope, tagscope: @tagscope, funded: @show_funded, order: :score), class: ['btn', 'btn-default', (@order == 'score' ? 'active' : nil)] %>
+    <%= link_to "By Requested $", admins_grant_submissions_path(reveal: @revealed, show_scores: @show_scores, scope: @scope, grantscope: @grantscope, tagscope: @tagscope, funded: @show_funded, order: :requested), class: ['btn', 'btn-default', (@order == 'requested' ? 'active' : nil)] %>
     <%= link_to "By Date", admins_grant_submissions_path(reveal: @revealed, show_scores: @show_scores, scope: @scope, grantscope: @grantscope, tagscope: @tagscope, funded: @show_funded, order: :date), class: ['btn', 'btn-default', (@order == 'date' ? 'active' : nil)] %>
     <%= link_to "By Name", admins_grant_submissions_path(reveal: @revealed, show_scores: @show_scores, scope: @scope, grantscope: @grantscope, tagscope: @tagscope, funded: @show_funded, order: :name), class: ['btn', 'btn-default', (@order == 'name' ? 'active' : nil)] %>
-  </div>
-  <br/><br/>
-  <div class="btn-group">
-    <%= link_to "Generate CSV", admins_grant_submissions_path(format: 'csv', reveal: @revealed, show_scores: @show_scores, scope: @scope, grantscope: @grantscope, tagscope: @tagscope, funded: @show_funded, order: :name), class: ['btn', 'btn-default'] %>
   </div>
 </div>
 
@@ -34,16 +36,17 @@
   <thead>
   <tr>
     <th>Name</th>
-    <th>Grant</th>
-    <th>Discussion</th>
+    <th class="hide-mobile">Tags</th>
+    <th class="hide-mobile">Grant</th>
+    <th class="hide-mobile">Discussion</th>
     <% if @show_scores %>
-    <th>Avg T</th>
-    <th>Avg C</th>
-    <th>Avg F</th>
-    <th>Avg Score</th>
-    <th>#</th>
+    <th class="hide-mobile">Avg T</th>
+    <th class="hide-mobile">Avg C</th>
+    <th class="hide-mobile">Avg F</th>
+    <th class="hide-mobile">Avg Score</th>
+    <th class="hide-mobile">#</th>
     <% end %>
-    <th>Decision Finalized</th>
+    <th class="hide-mobile">Decision Finalized</th>
     <th>Funding</th>
     <% if @revealed %>
     <th>Artist Name</th>
@@ -58,13 +61,26 @@
   <% @grant_submissions.each do |gs| %>
   <tr>
     <td>
-      <%= gs.name %>
+      <div class="grant-submission-name"><%= gs.name %></div>
+      <div class="grant-submission-description">
+        <!-- This stuff only shown in narrow-screen mode -->
+        <strong><%= gs.name %></strong><br/>
+        <h4><% gs.tags(can?(:view_hidden, Tag)).each do |tag| %>
+        <span class="label label-default label-thin"><%= tag %></span>
+        <% end %></h4>
+        Grant: <%= Grant.where("id = ?",gs.grant_id).take.name %><br/>
+        <% if @show_scores && (@results[gs.id]['num_total'] || 0) > 0%>
+          Scores:
+          <strong>T</strong><%= @results[gs.id]['avg_t'] %>
+          <strong>C</strong><%= @results[gs.id]['avg_c'] %>
+          <strong>F</strong><%= @results[gs.id]['avg_f'] %>
+          <br/>Avg:<%= @results[gs.id]['avg_s'] %>, Votes:<%= @results[gs.id]['num_total'] %><br/>
+        <% end %>
+        <%= discussion_status(gs) %>
+      </div>
       <div class="btn-toolbar">
         <div class="btn-group">
-          <%= link_to "Discuss / Fund", discuss_grant_submission_path(id: gs.id), class: 'btn btn-xs btn-default' %>
-        </div>
-        <div class="btn-group">
-          <%= link_to "Edit", edit_grant_submission_path(id: gs.id), class: 'btn btn-xs btn-default' %>
+          <%= link_to "Discuss / Fund", admins_grant_submission_discuss_path(grant_submission_id: gs.id), class: 'btn btn-xs btn-default' %>
         </div>
         <div class="btn-group">
           <% if gs.funded? %>
@@ -73,18 +89,23 @@
         </div>
       </div>
     </td>
-    <td><%= Grant.where("id = ?",gs.grant_id).take.name %></td>
-    <td><%= discussion_status(gs) %></td>
+    <td class="hide-mobile">
+      <h4><% gs.tags(can?(:view_hidden, Tag)).each do |tag| %>
+      <span class="label label-default label-thin"><%= tag %></span>
+      <% end %></h4>
+    </td>
+    <td class="hide-mobile"><%= Grant.where("id = ?",gs.grant_id).take.name %></td>
+    <td class="hide-mobile"><%= discussion_status(gs) %></td>
     <% if @show_scores %>
-    <td><%= @results[gs.id]['avg_t'] %></td>
-    <td><%= @results[gs.id]['avg_c'] %></td>
-    <td><%= @results[gs.id]['avg_f'] %></td>
-    <td><%= @results[gs.id]['avg_s'] %></td>
-    <td><%= @results[gs.id]['num_total'].fdiv(3.0).round(2).to_i %></td>
+    <td class="hide-mobile"><%= @results[gs.id]['avg_t'] %></td>
+    <td class="hide-mobile"><%= @results[gs.id]['avg_c'] %></td>
+    <td class="hide-mobile"><%= @results[gs.id]['avg_f'] %></td>
+    <td class="hide-mobile"><%= @results[gs.id]['avg_s'] %></td>
+    <td class="hide-mobile"><%= @results[gs.id]['num_total'].fdiv(3.0).round(2).to_i %></td>
     <% end %>
-    <td><% if gs.funding_decision %>Yes<% else %>No<% end %></td>
+    <td class="hide-mobile"><% if gs.funding_decision %>Yes<% else %>No<% end %></td>
     <td>
-      <%= render partial: 'grant_submissions/funding_table', locals: { grant_submission: gs }%>
+      <%= render partial: 'grant_submissions/funding_table_voters', locals: { grant_submission: gs }%>
     </td>
     <% if @revealed %>
       <td><%= (Artist.where(id: gs.artist_id).take).name rescue "Unknown" %></td>
@@ -102,27 +123,65 @@
   </tbody>
   <tfoot>
   <% unless @revealed %>
-  <% colspan = 5 + (@show_scores ? 5 : 0) + (@revealed ? 3 : 0) %>
-  <tr>
-    <td colspan="<%= colspan %>" class="text-right">
+  <% colspan_wide = 6 + (@show_scores ? 5 : 0) + (@revealed ? 3 : 0) %>
+  <% colspan_mobile = 2 %>
+  <!-- Wide footer -->
+  <tr class="hide-mobile">
+    <td colspan="<%= colspan_wide %>" class="text-right">
       <form name="send_email_form">
         <b>Send email when finalizing</b> <input type="checkbox" id="send_grant_fund_email_checkbox" checked="true">
       </form>
     </td>
     <td class="text-center"><%= button_to "Finalize", '#', :onclick => "confirm_selected(event);", class: 'btn btn-warning' %></td>
   </tr>
-  <tr>
-    <td colspan="<%= colspan - 1 %>" class="text-right">Total proposed grant money</td>
+  <tr class="hide-mobile">
+    <td colspan="<%= colspan_wide - 1 %>" class="text-right">Grant request range</td>
+    <% request_vals = GrantSubmission.requested_funding_dollars_total(@grant_submissions.map {|gs| gs.id}) %>
+    <td class="text-right footer"><%= number_to_currency request_vals[:min] %> - <%= number_to_currency request_vals[:max] %></td>
+    <td></td>
+  </tr>
+  <tr class="hide-mobile">
+    <td colspan="<%= colspan_wide - 1 %>" class="text-right">Total proposed grant money</td>
     <td class="text-right"><%= number_to_currency GrantSubmission.granted_funding_dollars_total(@grant_submissions.map {|gs| gs.id}, funding_decision: false) %></td>
     <td></td>
   </tr>
-  <tr>
-    <td colspan="<%= colspan - 1 %>" class="text-right">Total finalized grant money</td>
+  <tr class="hide-mobile">
+    <td colspan="<%= colspan_wide - 1 %>" class="text-right">Total finalized grant money</td>
     <td class="text-right"><%= number_to_currency GrantSubmission.granted_funding_dollars_total(@grant_submissions.map {|gs| gs.id}, funding_decision: true) %></td>
     <td></td>
   </tr>
-  <tr>
-    <td colspan="<%= colspan %>" class="text-right"><b>Sends emails to selected artists with non-empty Questions</b></td>
+  <tr class="hide-mobile">
+    <td colspan="<%= colspan_wide %>" class="text-right"><b>Sends emails to selected artists with non-empty Questions</b></td>
+    <td><%= button_to "Notify Questions", '#', :onclick => "notify_selected(event);", class: 'btn btn-warning' %></td>
+  </tr>
+
+  <!-- Narrow-screen footer -->
+  <tr class="footer-mobile">
+    <td colspan="<%= colspan_mobile %>" class="text-right">
+      <form name="send_email_form">
+        <b>Send email when finalizing</b> <input type="checkbox" id="send_grant_fund_email_checkbox" checked="true">
+      </form>
+    </td>
+    <td class="text-center"><%= button_to "Finalize", '#', :onclick => "confirm_selected(event);", class: 'btn btn-warning' %></td>
+  </tr>
+  <tr class="footer-mobile">
+    <td colspan="<%= colspan_mobile - 1 %>" class="text-right">Grant request range</td>
+    <% request_vals = GrantSubmission.requested_funding_dollars_total(@grant_submissions.map {|gs| gs.id}) %>
+    <td class="text-right footer"><%= number_to_currency request_vals[:min] %> - <%= number_to_currency request_vals[:max] %></td>
+    <td></td>
+  </tr>
+  <tr class="footer-mobile">
+    <td colspan="<%= colspan_mobile - 1 %>" class="text-right">Total proposed grant money</td>
+    <td class="text-right footer"><%= number_to_currency GrantSubmission.granted_funding_dollars_total(@grant_submissions.map {|gs| gs.id}, funding_decision: false) %></td>
+    <td></td>
+  </tr>
+  <tr class="footer-mobile">
+    <td colspan="<%= colspan_mobile - 1 %>" class="text-right">Total finalized grant money</td>
+    <td class="text-right"><%= number_to_currency GrantSubmission.granted_funding_dollars_total(@grant_submissions.map {|gs| gs.id}, funding_decision: true) %></td>
+    <td></td>
+  </tr>
+  <tr class="footer-mobile">
+    <td colspan="<%= colspan_mobile %>" class="text-right><b>Sends emails to selected artists with non-empty Questions</b></td>
     <td><%= button_to "Notify Questions", '#', :onclick => "notify_selected(event);", class: 'btn btn-warning' %></td>
   </tr>
   </tfoot>

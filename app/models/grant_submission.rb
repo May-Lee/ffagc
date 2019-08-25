@@ -20,7 +20,7 @@ class GrantSubmission < ActiveRecord::Base
 
   validates :grant, presence: true
 
-  validate :funding_requests_syntax
+  validate :funding_requests_syntax, :validate_funding_levels
 
   # This is supposed to check size before upload but I don't think it does.
   # It does validate after upload, though, so it's not DDOS-proof but it will
@@ -74,6 +74,32 @@ class GrantSubmission < ActiveRecord::Base
     end
   end
 
+  # Sum up requested dollars for the provided grant ids (for filtering)
+  # Returns a hash of the sum of minimum requests and maximum requests.
+  def self.requested_funding_dollars_total(id_list)
+    min_request_total = 0
+    max_request_total = 0
+    GrantSubmission.where(id: id_list).each do |gs|
+      gs_min = -1
+      gs_max = 0
+      gs.funding_requests_csv.split(',').each do |token|
+        begin
+          req = Integer(token)
+          if req > gs_max
+            gs_max = req
+          end
+          if req < gs_min || gs_min == -1
+            gs_min = req
+          end
+        rescue ArgumentError
+        end
+      end
+      min_request_total += gs_min
+      max_request_total += gs_max
+    end
+    return {min: min_request_total, max: max_request_total}
+  end
+
   # Sum up granted dollars for the provided grant ids (for filtering) and
   # by query (for further filtering).
   def self.granted_funding_dollars_total(id_list, query)
@@ -85,6 +111,21 @@ class GrantSubmission < ActiveRecord::Base
       return []
     end
     return funding_requests_csv.split(',')
+  end
+
+  def funding_requests_as_int_list
+    funding_requests_as_list.map{ |r| Integer(r) }
+  end
+
+  def by_requested(other)
+    self.mean_requested <=> other.mean_requested
+  end
+
+  def mean_requested
+    mean = 0
+    requests = funding_requests_as_int_list
+    requests.each { |r| mean += r }
+    mean.to_f / requests.length
   end
 
   private
@@ -109,6 +150,35 @@ class GrantSubmission < ActiveRecord::Base
         Integer(token)
       rescue ArgumentError
         errors.add(:funding_requests_csv, errmsg)
+      end
+    end
+  end
+
+  def validate_funding_levels
+    levels_array = []
+    grant.funding_levels_csv.split(',').each do |token|
+      limits = token.split("-")
+      if limits.length == 1
+        limit = Integer(limits[0])
+        levels_array.append([limit, limit])
+      elsif limits.length == 2
+        lower = Integer(limits[0])
+        upper = Integer(limits[1])
+        levels_array.append([lower, upper])
+      end
+    end
+
+    funding_requests_csv.split(',').each do |req|
+      req_val = Integer(req)
+      valid = false
+      levels_array.each do |range|
+        if req_val >= range[0] && req_val <= range[1]
+          valid = true
+          break
+        end
+      end
+      if not valid
+        errors.add(:funding_requests_csv, "funding requests match no available levels")
       end
     end
   end

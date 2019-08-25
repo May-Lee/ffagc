@@ -14,8 +14,9 @@ class Admins::VoterSubmissionAssignmentsController < ApplicationController
   # Cleans any existing invalid VoterSubmissionAssignments.
   #
   # Goes through each unique GrantSubmission and assigns eligible voters to that
-  # GrantSubmission choosing Voters with fewest VoterSubmissionAssignments first.
-  # Will not assign more than Grantsubmission#max_voters Voters to a GrantSubmission.
+  # GrantSubmission choosing Voters with fewest VoterSubmissionAssignments for
+  # that grant type first. Will not assign more than Grantsubmission#max_voters
+  # Voters to a GrantSubmission.
   #
   # If a GrantSubmission needs more Voters but non are eligible nothing happens for
   # that GrantSubmission.
@@ -24,7 +25,7 @@ class Admins::VoterSubmissionAssignmentsController < ApplicationController
   def assign
     clean_assignments
 
-    unique_grant_submissions.each do |grant_submission|
+    GrantSubmission.all.each do |grant_submission|
       # find voters not assigned this grant
       voters = grant_submission.grant.voters
         .includes(:voter_submission_assignments, :grant_submissions)
@@ -42,7 +43,7 @@ class Admins::VoterSubmissionAssignmentsController < ApplicationController
       # number of voters.
       voters_to_assign = eligible_voters
         .shuffle
-        .sort_by { |voter| voter.voter_submission_assignments.count }
+        .sort_by { |voter| voter.assignments_per_grant(grant_submission.grant_id) }
         .take(grant_submission.num_voters_to_assign)
 
       voters_to_assign.each do |voter|
@@ -63,32 +64,6 @@ class Admins::VoterSubmissionAssignmentsController < ApplicationController
   end
 
   private
-
-  def unique_grant_submissions
-    # TEMP HACK
-    # NOTE: Keep a list of seen grant submission titles, and if we
-    # see a duplicate, skip it. This way artists that submitted at more than
-    # one grant level won't appear twice in the voting assignments. This
-    # should be removed once we have proper tier selection.
-    seen = Set.new
-
-    unique_grant_submissions = []
-
-    Grant.includes(grant_submissions: [:artist]).find_each do |grant|
-      unique_grant_submissions << grant.grant_submissions.select do |grant_submission|
-        # Include the Grantsubmission#name *and* artist_id in case
-        # two Artists picked the same GrantSubmission#name
-        gs_uid = [grant_submission.name, grant_submission.artist_id]
-
-        unless seen.include?(gs_uid)
-          seen.add(gs_uid)
-          true
-        end
-      end
-    end
-
-    unique_grant_submissions.flatten
-  end
 
   # Goes through the voter assignments and delete extraneous entries.
   # Unverified voters keep their assignments because their values are

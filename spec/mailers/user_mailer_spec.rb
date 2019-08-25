@@ -1,5 +1,5 @@
 describe UserMailer do
-  let(:artist) { FactoryGirl.create(:artist, :activated) }
+  let(:artist) { FactoryBot.create(:artist, :activated) }
 
   describe '#account_activation' do
     before do
@@ -13,7 +13,7 @@ describe UserMailer do
     its(:to) { is_expected.to eq([artist.email]) }
 
     it do
-      expect(subject.body.encoded).to include(artist.name)
+      expect(subject.body.encoded).to include(CGI.escapeHTML(artist.name))
       expect(subject.body.encoded).to include(artist.activation_token)
       expect(subject.body.encoded).to include(CGI.escape(artist.email))
     end
@@ -31,19 +31,19 @@ describe UserMailer do
     its(:to) { is_expected.to eq([artist.email]) }
 
     it do
-      expect(subject.body.encoded).to include(artist.name)
+      expect(subject.body.encoded).to include(CGI.escapeHTML(artist.name))
       expect(subject.body.encoded).to include(artist.reset_token)
       expect(subject.body.encoded).to include(CGI.escape(artist.email))
     end
   end
 
   describe '#grant_funded' do
-    let!(:grant) { FactoryGirl.create(:grant, name: 'Creativity') }
+    let!(:grant) { FactoryBot.create(:grant, name: 'Creativity') }
 
     context 'without notes' do
       let!(:grant_submission) {
-        FactoryGirl.create(:grant_submission, artist: artist, grant: grant,
-          requested_funding_dollars: 5000, granted_funding_dollars: 800) }
+        FactoryBot.create(:grant_submission, artist: artist, grant: grant,
+          funding_requests_csv: "5000", granted_funding_dollars: 800) }
 
       subject { UserMailer.grant_funded(grant_submission, artist, grant, '2020') }
 
@@ -59,8 +59,8 @@ describe UserMailer do
 
     context 'with blank notes' do
       let!(:grant_submission) {
-        FactoryGirl.create(:grant_submission, artist: artist, grant: grant,
-          requested_funding_dollars: 5000, granted_funding_dollars: 800,
+        FactoryBot.create(:grant_submission, artist: artist, grant: grant,
+          funding_requests_csv: "5000", granted_funding_dollars: 800,
           public_funding_notes: "") }
 
       subject { UserMailer.grant_funded(grant_submission, artist, grant, '2020') }
@@ -79,8 +79,8 @@ describe UserMailer do
 
     context 'with notes' do
       let!(:grant_submission) {
-        FactoryGirl.create(:grant_submission, artist: artist, grant: grant,
-          requested_funding_dollars: 5000, granted_funding_dollars: 800,
+        FactoryBot.create(:grant_submission, artist: artist, grant: grant,
+          funding_requests_csv: "5000", granted_funding_dollars: 800,
           private_funding_notes: "NOTINCLUDED",
           public_funding_notes: "SOMENOTES") }
 
@@ -100,12 +100,12 @@ describe UserMailer do
   end
 
   describe '#grant_not_funded' do
-    let!(:grant) { FactoryGirl.create(:grant, name: 'Creativity') }
+    let!(:grant) { FactoryBot.create(:grant, name: 'Creativity') }
 
     context 'without notes' do
       let!(:grant_submission) {
-        FactoryGirl.create(:grant_submission, artist: artist, grant: grant,
-          requested_funding_dollars: 5000)
+        FactoryBot.create(:grant_submission, artist: artist, grant: grant,
+          funding_requests_csv: "5000")
         }
 
       subject { UserMailer.grant_not_funded(grant_submission, artist, grant, '2020') }
@@ -121,8 +121,8 @@ describe UserMailer do
 
     context 'with notes' do
       let!(:grant_submission) {
-        FactoryGirl.create(:grant_submission, artist: artist, grant: grant,
-          requested_funding_dollars: 5000, private_funding_notes: "NOTINCLUDED",
+        FactoryBot.create(:grant_submission, artist: artist, grant: grant,
+          funding_requests_csv: "5000", private_funding_notes: "NOTINCLUDED",
           public_funding_notes: "SOMENOTES")
         }
 
